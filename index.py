@@ -4,6 +4,7 @@
 import requests
 from cryptor import rsacrypt
 
+base_url = "http://cms.pokermanager.club/cms-api/"
 token = '305c300d06092a864886f70d0101010500034b003048024100d812a482263f7f6fe89756af3e50cd3ee12b66c5977f996994df948e05a69aebf422ca1bb8567231531dd574ead8a959ac6f8067718effcb01591e5649e99fb70203010001'
 reqData = rsacrypt.info_crypt('18206774149', 'aa8888', token)
 
