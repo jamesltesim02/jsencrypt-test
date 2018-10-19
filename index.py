@@ -16,6 +16,10 @@ result = requests.post(
       "locale": "zh"
     },
     headers = {
+      "Accept": "application/json, text/javascript, */*; q=0.01",
+      "Accept-Encoding": "gzip, deflate",
+      "X-Requested-With": "XMLHttpRequest",
+      "Content-Type": "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
       "Referer": "ttp://cms.pokermanager.club/cms-web/cmsLogin.html",
       "Origin": "http://cms.pokermanager.club",
       "Cookie": "aliyungf_tc=AQAAAMccyEEdkAUA2bAydCfS/oxuJgEl; userLanguage=zh",
