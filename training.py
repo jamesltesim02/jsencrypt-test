@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# coding=utf-8
 
 import tensorflow as tf
 import numpy as np
@@ -99,7 +101,6 @@ def get_data_and_label(fileName, filePath=CAPTCHA_IMAGE_PATH):
     image_array = np.array(img)    
     image_data = image_array.flatten()/255
     image_label = name2label(fileName[0:CAPTCHA_LEN])
-    print(image_label)
     return image_data, image_label
 
 #生成一个训练batch    
