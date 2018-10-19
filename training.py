@@ -7,7 +7,7 @@ import random
 import time
 
 # 训练图片目录
-CAPTCHA_IMAGE_PATH = os.path.dirname(os.path.realpath(__file__)) + '/captchares/'
+CAPTCHA_IMAGE_PATH = os.path.dirname(os.path.realpath(__file__)) + '/captchares/images/'
 
 #验证码图片的宽度
 CAPTCHA_IMAGE_WIDHT = 140
@@ -65,7 +65,7 @@ TRAINING_IMAGE_NAME = []
 VALIDATION_IMAGE_NAME = []
 
 #存放训练好的模型的路径
-MODEL_SAVE_PATH = os.path.dirname(os.path.realpath(__file__)) + '/models/'
+MODEL_SAVE_PATH = os.path.dirname(os.path.realpath(__file__)) + '/captchares/models/'
 
 # 获取文件夹下所有图片
 def get_image_file_name(imgPath=CAPTCHA_IMAGE_PATH):
@@ -99,6 +99,7 @@ def get_data_and_label(fileName, filePath=CAPTCHA_IMAGE_PATH):
     image_array = np.array(img)    
     image_data = image_array.flatten()/255
     image_label = name2label(fileName[0:CAPTCHA_LEN])
+    print(image_label)
     return image_data, image_label
 
 #生成一个训练batch    
