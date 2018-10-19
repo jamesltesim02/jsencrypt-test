@@ -3,6 +3,7 @@
 
 from hashlib import md5
 from Crypto.PublicKey import RSA
+# from Crypto.Cipher import PKCS1_OAEP
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 import base64
 import execjs
@@ -26,5 +27,9 @@ def info_crypt(username, password, token):
 
   rsakey = RSA.import_key(publickey)
   cipher = Cipher_pkcs1_v1_5.new(rsakey)
+  # cipher = PKCS1_OAEP.new(rsakey)
 
-  return base64.b64encode(cipher.encrypt(inputText))
+  encrypted = cipher.encrypt(inputText)
+  print(encrypted)
+
+  return base64.b64encode(encrypted)
