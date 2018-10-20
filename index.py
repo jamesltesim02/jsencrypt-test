@@ -3,29 +3,26 @@
 
 import requests
 from cryptor import rsacrypt
+import json
 
 base_url = "http://cms.pokermanager.club/cms-api/"
-token = '305c300d06092a864886f70d0101010500034b003048024100d812a482263f7f6fe89756af3e50cd3ee12b66c5977f996994df948e05a69aebf422ca1bb8567231531dd574ead8a959ac6f8067718effcb01591e5649e99fb70203010001'
-reqData = rsacrypt.info_crypt('18206774149', 'aa8888', token)
+token = '305c300d06092a864886f70d0101010500034b003048024100ac6b5b3631b62d43807c7e6ffaf5fc3c661ec13e2bf5926986013de0fbf06b913f5fac864a60ba4b017b792e1e9e9bb3555ea1eab85810d0cd0920d20623e3a30203010001'
+reqData = rsacrypt.info_crypt(token, '18206774149', 'aa8888')
 
 result = requests.post(
-    base_url + "captcha",
+    base_url + "login",
     data = {
       "token": token,
       "data": reqData,
-      "safeCode": "ccbx",
+      "safeCode": "xp37",
       "locale": "zh"
     },
     headers = {
-      "Accept": "application/json, text/javascript, */*; q=0.01",
-      "Accept-Encoding": "gzip, deflate",
-      "X-Requested-With": "XMLHttpRequest",
-      "Content-Type": "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
-      "Referer": "ttp://cms.pokermanager.club/cms-web/cmsLogin.html",
+      "Referer": "http://cms.pokermanager.club/cms-web/cmsLogin.html",
       "Origin": "http://cms.pokermanager.club",
-      "Cookie": "aliyungf_tc=AQAAAMccyEEdkAUA2bAydCfS/oxuJgEl; userLanguage=zh",
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36"
-    }
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36",
+    },
+    cookies = {'aliyungf_tc': 'AQAAAIM/OEWLkQEA2bAydBqRRmhRE3XR'}
   ).json()
 
 print(result)

@@ -1,35 +1,25 @@
 #! /usr/bin/env python
 # coding=utf-8
 
-from hashlib import md5
-from Crypto.PublicKey import RSA
-# from Crypto.Cipher import PKCS1_OAEP
-from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
-import base64
 import execjs
 import os
 
-def info_crypt(username, password, token):
-  encryptjs = open(os.path.dirname(os.path.realpath(__file__)) + '/jsencrypt.js', 'r').read()
+def info_crypt(token, username, password):
+  encryptjs = open(os.path.dirname(os.path.realpath(__file__)) + '/all.min.js', 'r').read()
   customFun = """
       ;function getPublicKey(key) {
         var encrypt = new window.JSEncrypt();
         encrypt.setPublicKey(key);
         return encrypt.getPublicKey();
       }
+      ;function getEncrypt(key, username, password) {
+        var encrypt = new JSEncrypt();
+        encrypt.setPublicKey(key);
+        return encrypt.encrypt(username + ',' + hex_md5(password));
+      }
     """
   jsEnv = encryptjs + customFun
   ctx = execjs.compile(jsEnv)
 
-  md5pass = md5(password.encode('utf-8')).hexdigest().upper()
-  inputText = username + ',' + md5pass
-  publickey = ctx.call("getPublicKey", token)
-
-  rsakey = RSA.import_key(publickey)
-  cipher = Cipher_pkcs1_v1_5.new(rsakey)
-  # cipher = PKCS1_OAEP.new(rsakey)
-
-  encrypted = cipher.encrypt(inputText)
-  print(encrypted)
-
-  return base64.b64encode(encrypted)
+  result = ctx.call("getEncrypt", token, username, password)
+  return result 
