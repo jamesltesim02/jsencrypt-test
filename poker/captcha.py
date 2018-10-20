@@ -23,13 +23,36 @@ class VectorCompare:
                 topvalue += count * concordance2[word]
         return topvalue / (self.magnitude(concordance1) * self.magnitude(concordance2))
 
-letterPath = './img_data'
-idx = 0
-for file in os.listdir(letterPath):
-	if file.startswith('.') or file.startswith('..'):
-		continue
-	im = Image.open(os.path.join(letterPath, file))
+def depoint(img):   #input: gray image
+	pixdata = img.load()
+	w,h = img.size
+	for y in range(1,h-1):
+		for x in range(1,w-1):
+			count = 0
+			if pixdata[x,y-1] > 245:
+				count = count + 1
+			if pixdata[x,y+1] > 245:
+				count = count + 1
+			if pixdata[x-1,y] > 245:
+				count = count + 1
+			if pixdata[x+1,y] > 245:
+				count = count + 1
+			if count > 3:
+				pixdata[x,y] = 255
+	return img
 
+def buildvector(im):
+	d1 = {}
+	count = 0
+	for i in im.getdata():
+		d1[count] = i
+		count += 1
+	return d1
+
+def crack(src):
+	byte_data = base64.b64decode(src)
+    image_data = BytesIO(byte_data)
+    im = Image.open(image_data)
 	for x in range(im.size[1]):
 	    for y in range(im.size[0]):
 	        pix = im.getpixel((y,x))
@@ -43,37 +66,12 @@ for file in os.listdir(letterPath):
 	his = im.histogram()
 	values = {}
 
-	# for i in range(256):
-	#     values[i] = his[i]
-
-	# for j,k in sorted(values.items(),key=lambda x:x[1],reverse = True)[:10]:
-	#     print j,k
-
-
 	for x in range(im.size[1]):
 	    for y in range(im.size[0]):
 	        pix = im.getpixel((y,x))
 	        if pix in [190, 154, 82, 118, 191, 197, 46]: # these are the numbers to get
 	            im2.putpixel((y,x),0)
-
-	def depoint(img):   #input: gray image
-	    pixdata = img.load()
-	    w,h = img.size
-	    for y in range(1,h-1):
-	        for x in range(1,w-1):
-	            count = 0
-	            if pixdata[x,y-1] > 245:
-	                count = count + 1
-	            if pixdata[x,y+1] > 245:
-	                count = count + 1
-	            if pixdata[x-1,y] > 245:
-	                count = count + 1
-	            if pixdata[x+1,y] > 245:
-	                count = count + 1
-	            if count > 3:
-	                pixdata[x,y] = 255
-	    return img
-
+	
 	im2 = depoint(im2)
 
 	inletter = False
@@ -98,16 +96,6 @@ for file in os.listdir(letterPath):
 	        letters.append((start,end))
 
 	    inletter=False
-
-	#将图片转换为矢量
-	def buildvector(im):
-	    d1 = {}
-	    count = 0
-	    for i in im.getdata():
-	        d1[count] = i
-	        count += 1
-	    return d1
-
 	v = VectorCompare()
 
 	iconset = ['0','1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -139,11 +127,4 @@ for file in os.listdir(letterPath):
 
 	    guess.sort(reverse=True)
 	    validName += guess[0][1]
-	    # m = hashlib.md5()
-	    # output_buffer = BytesIO()
-	    # im3.save(output_buffer, format='PNG')
-	    # m.update(output_buffer.getvalue())
-	    # im3.save("./tmp/%s/%s.png"%(guess[0][1], m.hexdigest()))
-	    # count += 1
-	im.save('./tmp/%s_%s.png'%(idx, validName))
-	idx+=1
+	return validName
